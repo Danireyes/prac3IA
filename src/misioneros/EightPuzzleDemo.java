@@ -26,10 +26,10 @@ import aima.core.search.uninformed.IterativeDeepeningSearch;
  */
 
 public class EightPuzzleDemo {
-	static EightPuzzleBoard boardWithThreeMoveSolution = new EightPuzzleBoard(
-			new int[] { 1, 2, 5, 3, 4, 0, 6, 7, 8 });;
+	static MisionerosRiver boardWithThreeMoveSolution = new MisionerosRiver(
+			new int[] { });;
 
-	static EightPuzzleBoard random1 = new EightPuzzleBoard(new int[] { 1, 4, 2,
+	static MisionerosRiver random1 = new EightPuzzleBoard(new int[] { 1, 4, 2,
 			7, 5, 8, 3, 0, 6 });
 
 	static EightPuzzleBoard extreme = new EightPuzzleBoard(new int[] { 0, 8, 7,
@@ -48,9 +48,9 @@ public class EightPuzzleDemo {
 	private static void eightPuzzleDLSDemo() {
 		System.out.println("\nEightPuzzleDemo recursive DLS (9) -->");
 		try {
-			Problem problem = new Problem(boardWithThreeMoveSolution, EightPuzzleFunctionFactory
-					.getActionsFunction(), EightPuzzleFunctionFactory
-					.getResultFunction(), new EightPuzzleGoalTest());
+			Problem problem = new Problem(boardWithThreeMoveSolution, MisionerosRiverFunctionFactory
+					.getActionsFunction(), MisionerosRiverFunctionFactory
+					.getResultFunction(), new MisionerosGoalTest());
 			Search search = new DepthLimitedSearch(9);
 			SearchAgent agent = new SearchAgent(problem, search);
 			printActions(agent.getActions());
@@ -64,9 +64,9 @@ public class EightPuzzleDemo {
 	private static void eightPuzzleIDLSDemo() {
 		System.out.println("\nEightPuzzleDemo Iterative DLS -->");
 		try {
-			Problem problem = new Problem(random1, EightPuzzleFunctionFactory
-					.getActionsFunction(), EightPuzzleFunctionFactory
-					.getResultFunction(), new EightPuzzleGoalTest());
+			Problem problem = new Problem(random1, MisionerosRiverFunctionFactory
+					.getActionsFunction(), MisionerosRiverFunctionFactory
+					.getResultFunction(), new MisionerosGoalTest());
 			Search search = new IterativeDeepeningSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 			printActions(agent.getActions());
@@ -82,9 +82,9 @@ public class EightPuzzleDemo {
 				.println("\nEightPuzzleDemo Greedy Best First Search (MisplacedTileHeursitic)-->");
 		try {
 			Problem problem = new Problem(boardWithThreeMoveSolution,
-					EightPuzzleFunctionFactory.getActionsFunction(),
-					EightPuzzleFunctionFactory.getResultFunction(),
-					new EightPuzzleGoalTest());
+					MisionerosRiverFunctionFactory.getActionsFunction(),
+					MisionerosRiverFunctionFactory.getResultFunction(),
+					new MisionerosGoalTest());
 			Search search = new GreedyBestFirstSearch(new GraphSearch(),
 					new MisplacedTilleHeuristicFunction());
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -101,9 +101,9 @@ public class EightPuzzleDemo {
 				.println("\nEightPuzzleDemo Greedy Best First Search (ManhattanHeursitic)-->");
 		try {
 			Problem problem = new Problem(boardWithThreeMoveSolution,
-					EightPuzzleFunctionFactory.getActionsFunction(),
-					EightPuzzleFunctionFactory.getResultFunction(),
-					new EightPuzzleGoalTest());
+					MisionerosRiverFunctionFactory.getActionsFunction(),
+					MisionerosRiverFunctionFactory.getResultFunction(),
+					new MisionerosGoalTest());
 			Search search = new GreedyBestFirstSearch(new GraphSearch(),
 					new ManhattanHeuristicFunction());
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -119,9 +119,9 @@ public class EightPuzzleDemo {
 		System.out
 				.println("\nEightPuzzleDemo AStar Search (MisplacedTileHeursitic)-->");
 		try {
-			Problem problem = new Problem(random1, EightPuzzleFunctionFactory
-					.getActionsFunction(), EightPuzzleFunctionFactory
-					.getResultFunction(), new EightPuzzleGoalTest());
+			Problem problem = new Problem(random1, MisionerosRiverFunctionFactory
+					.getActionsFunction(), MisionerosRiverFunctionFactory
+					.getResultFunction(), new MisionerosGoalTest());
 			Search search = new AStarSearch(new GraphSearch(),
 					new MisplacedTilleHeuristicFunction());
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -136,9 +136,9 @@ public class EightPuzzleDemo {
 	private static void eightPuzzleSimulatedAnnealingDemo() {
 		System.out.println("\nEightPuzzleDemo Simulated Annealing  Search -->");
 		try {
-			Problem problem = new Problem(random1, EightPuzzleFunctionFactory
-					.getActionsFunction(), EightPuzzleFunctionFactory
-					.getResultFunction(), new EightPuzzleGoalTest());
+			Problem problem = new Problem(random1, MisionerosRiverFunctionFactory
+					.getActionsFunction(), MisionerosRiverFunctionFactory
+					.getResultFunction(), new MisionerosGoalTest());
 			SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(
 					new ManhattanHeuristicFunction());
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -155,9 +155,9 @@ public class EightPuzzleDemo {
 		System.out
 				.println("\nEightPuzzleDemo AStar Search (ManhattanHeursitic)-->");
 		try {
-			Problem problem = new Problem(random1, EightPuzzleFunctionFactory
-					.getActionsFunction(), EightPuzzleFunctionFactory
-					.getResultFunction(), new EightPuzzleGoalTest());
+			Problem problem = new Problem(random1, MisionerosRiverFunctionFactory
+					.getActionsFunction(), MisionerosRiverFunctionFactory
+					.getResultFunction(), new MisionerosGoalTest());
 			Search search = new AStarSearch(new GraphSearch(),
 					new ManhattanHeuristicFunction());
 			SearchAgent agent = new SearchAgent(problem, search);

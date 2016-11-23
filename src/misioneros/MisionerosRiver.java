@@ -13,19 +13,33 @@ import aima.core.util.datastructure.XYLocation;
  */
 public class MisionerosRiver {
 
-	public static Action LEFT = new DynamicAction("Left");
-
-	public static Action RIGHT = new DynamicAction("Right");
-
-	private int[] NMNCinBank;//number of misioners number of canibals on the river bank
 	
-	public enum Position {Right, Left}
+
+	public enum Position {Right, Left;
+		 static String toString(Position pos) {
+			if (pos == Right) {
+				return "derecha";
+			}
+			else {
+				return "izquierda";
+			}
+		 }
+	}
 	
 	private Position boatPosition;
+	public static Action LEFTM = new DynamicAction("LeftM");
 
+	public static Action RIGHTM = new DynamicAction("RightM");
+	
+	public static Action LEFTC = new DynamicAction("LeftC");
+
+	public static Action RIGHTC = new DynamicAction("RightC");
+
+	private int[] NMNCinBank;//number of misioners number of canibals on the river bank
 	//
 	// PUBLIC METHODS
 	//
+
 
 	public MisionerosRiver() {
 		NMNCinBank = new int[] { 3,3,0,0 };
@@ -37,102 +51,106 @@ public class MisionerosRiver {
 		this.boatPosition = pos;
 	}
 
-	public MisionerosRiver(MisionerosRiver copyBoard) {
-		this(copyBoard.getState());
+	public MisionerosRiver(MisionerosRiver copyRiver) {
+		this(copyRiver.getNMNCinBank(), copyRiver.getBoatPosition());
 	}
 
-	public int[] getState() {
+	public Position getBoatPosition() {
+		return boatPosition;
+	}
+	
+	
+	public int[] getNMNCinBank() {
+		return NMNCinBank;
+	}
+	
+	/*public int[] getState() {
 		return state;
-	}
+	}*/
 
-	public int getValueAt(XYLocation loc) {
-		return getValueAt(loc.getXCoOrdinate(), loc.getYCoOrdinate());
-	}
-
-	public XYLocation getLocationOf(int val) {
-		int absPos = getPositionOf(val);
-		return new XYLocation(getXCoord(absPos), getYCoord(absPos));
-	}
-
-	public void moveGapRight() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int ypos = getYCoord(gapPos);
-		if (!(ypos == 2)) {
-			int valueOnRight = getValueAt(x, ypos + 1);
-			setValue(x, ypos, valueOnRight);
-			setValue(x, ypos + 1, 0);
-		}
-
-	}
-
-	public void moveGapLeft() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int ypos = getYCoord(gapPos);
-		if (!(ypos == 0)) {
-			int valueOnLeft = getValueAt(x, ypos - 1);
-			setValue(x, ypos, valueOnLeft);
-			setValue(x, ypos - 1, 0);
-		}
-
-	}
-
-	public void moveGapDown() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int y = getYCoord(gapPos);
-		if (!(x == 2)) {
-			int valueOnBottom = getValueAt(x + 1, y);
-			setValue(x, y, valueOnBottom);
-			setValue(x + 1, y, 0);
-		}
-
-	}
-
-	public void moveGapUp() {
-		int gapPos = getGapPosition();
-		int x = getXCoord(gapPos);
-		int y = getYCoord(gapPos);
-		if (!(x == 0)) {
-			int valueOnTop = getValueAt(x - 1, y);
-			setValue(x, y, valueOnTop);
-			setValue(x - 1, y, 0);
+	public void moveRight(String character) {
+		switch (character) {
+		case "misionero":
+			if(canMoveGap(this.RIGHTM)) {
+				this.NMNCinBank[0]--;
+				this.NMNCinBank[2]++;
+			}
+			else {
+				System.err.println("No se puede mover al misionero");
+			}
+			break;
+		case "canibal":
+			if(canMoveGap(this.RIGHTC)) {
+				this.NMNCinBank[1]--;
+				this.NMNCinBank[3]++;
+			}
+			else {
+				System.err.println("No se puede mover al canibal");
+			}
+			break;
 		}
 	}
 
-	public List<XYLocation> getPositions() {
-		ArrayList<XYLocation> retVal = new ArrayList<XYLocation>();
-		for (int i = 0; i < 9; i++) {
-			int absPos = getPositionOf(i);
-			XYLocation loc = new XYLocation(getXCoord(absPos),
-					getYCoord(absPos));
-			retVal.add(loc);
-
+	public void moveLeft(String character) {
+		switch (character) {
+		case "misionero":
+			if(canMoveGap(this.LEFTM)){
+				this.NMNCinBank[2]--;
+				this.NMNCinBank[0]++;
+				changeBoatPosition();
+			}
+			else {
+				System.err.println("No se puede mover al misionero");
+			}
+			break;
+		case "canibal":
+			if(canMoveGap(this.LEFTC)) {
+				this.NMNCinBank[3]++;
+				this.NMNCinBank[1]--;
+				changeBoatPosition();
+			}
+			else {
+				System.err.println("No se puede mover al canibal");
+			}
+			break;
 		}
-		return retVal;
+	}
+	
+	private void changeBoatPosition() {
+		if (this.boatPosition == Position.Right) {
+			this.boatPosition = Position.Left;
+		}
+		else {
+			this.boatPosition = Position.Right;
+		}
 	}
 
-	public void setBoard(List<XYLocation> locs) {
-		int count = 0;
-		for (int i = 0; i < locs.size(); i++) {
-			XYLocation loc = locs.get(i);
-			this.setValue(loc.getXCoOrdinate(), loc.getYCoOrdinate(), count);
-			count = count + 1;
-		}
-	}
-
-	public boolean canMoveGap(Action where) {
+	public boolean canMoveGap(javax.swing.Action where) {
 		boolean retVal = true;
-		int absPos = getPositionOf(0);
-		if (where.equals(LEFT))
-			retVal = (getYCoord(absPos) != 0);
-		else if (where.equals(RIGHT))
-			retVal = (getYCoord(absPos) != 2);
-		else if (where.equals(UP))
-			retVal = (getXCoord(absPos) != 0);
-		else if (where.equals(DOWN))
-			retVal = (getXCoord(absPos) != 2);
+		if (where.equals(LEFTM)) {
+			if (this.boatPosition == Position.Right){retVal = false;}
+			if((this.NMNCinBank[2] < 0) && ((this.NMNCinBank[2] - 1) < this.NMNCinBank[3])) {
+				retVal = false;
+			}
+		}
+		else if (where.equals(LEFTC)) {
+			if (this.boatPosition == Position.Right){retVal = false;}
+			if((this.NMNCinBank[3] < 0) && (this.NMNCinBank[0] < (this.NMNCinBank[1] + 1))) {
+				retVal = false;
+			}
+		}
+		else if (where.equals(RIGHTM)) {
+			if (this.boatPosition == Position.Left) {retVal = false;}
+			if((this.NMNCinBank[0] < 0) && ((this.NMNCinBank[0] - 1) < this.NMNCinBank[1])) {
+				retVal = false;
+			}
+		}
+		else {
+			if (this.boatPosition == Position.Left) {retVal = false;}
+			if((this.NMNCinBank[1] < 0) && (this.NMNCinBank[2] < (this.NMNCinBank[3] + 1))) {
+				retVal = false;
+			}
+		}
 		return retVal;
 	}
 
@@ -145,80 +163,33 @@ public class MisionerosRiver {
 		if ((o == null) || (this.getClass() != o.getClass())) {
 			return false;
 		}
-		MisionerosRiver aBoard = (MisionerosRiver) o;
+		MisionerosRiver aRiver = (MisionerosRiver) o;
 
-		for (int i = 0; i < 8; i++) {
-			if (this.getPositionOf(i) != aBoard.getPositionOf(i)) {
-				return false;
-			}
+		if (aBoard.getNMNCinBank() != this.NMNCinBank && aRiver.getBoatPosition() != this.boatPosition) {
+			return false;
 		}
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		for (int i = 0; i < 8; i++) {
-			int position = this.getPositionOf(i);
-			result = 37 * result + position;
+		int result = 0;
+		result += this.NMNCinBank[0] * 8;
+		result += this.NMNCinBank[1];
+		result -= this.NMNCinBank[2] * 8;
+		result -= this.NMNCinBank[3];
+		if(this.boatPosition == Position.Left) {
+			result += 1;
 		}
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		String retVal = state[0] + " " + state[1] + " " + state[2] + "\n"
-				+ state[3] + " " + state[4] + " " + state[5] + " " + "\n"
-				+ state[6] + " " + state[7] + " " + state[8];
-		return retVal;
+		return "Hay " + this.NMNCinBank[0] + " misioneros y " + this.NMNCinBank[1]
+				+ " canibales en la izquierda, y hay " + this.NMNCinBank[2] + " misioneros y " + this.NMNCinBank[3]
+						+ " canibales en la derecha. Y el barco está en la " + Position.toString(this.boatPosition) + ".";
 	}
 
-	//
-	// PRIVATE METHODS
-	//
-
-	/**
-	 * Note: The graphic representation maps x values on row numbers (x-axis in
-	 * vertical direction).
-	 */
-	private int getXCoord(int absPos) {
-		return absPos / 3;
-	}
-
-	/**
-	 * Note: The graphic representation maps y values on column numbers (y-axis
-	 * in horizontal direction).
-	 */
-	private int getYCoord(int absPos) {
-		return absPos % 3;
-	}
-
-	private int getAbsPosition(int x, int y) {
-		return x * 3 + y;
-	}
-
-	private int getValueAt(int x, int y) {
-		// refactor this use either case or a div/mod soln
-		return state[getAbsPosition(x, y)];
-	}
-
-	private int getGapPosition() {
-		return getPositionOf(0);
-	}
-
-	private int getPositionOf(int val) {
-		int retVal = -1;
-		for (int i = 0; i < 9; i++) {
-			if (state[i] == val) {
-				retVal = i;
-			}
-		}
-		return retVal;
-	}
-
-	private void setValue(int x, int y, int val) {
-		int absPos = getAbsPosition(x, y);
-		state[absPos] = val;
-
-	}
+	
 }
