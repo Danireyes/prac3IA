@@ -1,6 +1,6 @@
 package misioneros;
 
-import aima.core.environment.eightpuzzle.EightPuzzleBoard;
+//import aima.core.environment.eightpuzzle.EightPuzzleBoard;
 import aima.core.search.framework.GoalTest;
 import misioneros.MisionerosRiver.Position;
 
